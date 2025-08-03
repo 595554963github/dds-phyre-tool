@@ -1,0 +1,7 @@
+#pragma once
+
+#define VERSION_MAJOR "0"
+#define VERSION_MINOR "7"
+#define VERSION_STEP "0"
+
+#define VERSION_FULL VERSION_MAJOR "." VERSION_MINOR "." VERSION_STEP
