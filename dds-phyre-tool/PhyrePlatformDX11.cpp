@@ -218,11 +218,31 @@ namespace phyre
         phyreFile.seekg(textureInfo.dataOffset, std::ios::beg);
         phyreFile.read(dataBuffer.data(), dataSize);
 
+        uint32_t rowPitch = 0;
+        if (ddsHeader.dwFlags & DDSD_PITCH) {
+            rowPitch = ddsHeader.dwPitchOrLinearSize;
+        }
+        else if (ddsHeader.dwFlags & DDSD_LINEARSIZE) {
+            rowPitch = ddsHeader.dwPitchOrLinearSize / ddsHeader.dwHeight;
+        }
+
+        if (rowPitch > 0) {
+            uint32_t height = ddsHeader.dwHeight;
+            std::vector<char> rowBuffer(rowPitch);
+            for (uint32_t y = 0; y < height / 2; y++) {
+                char* topRow = dataBuffer.data() + y * rowPitch;
+                char* bottomRow = dataBuffer.data() + (height - 1 - y) * rowPitch;
+                std::memcpy(rowBuffer.data(), topRow, rowPitch);
+                std::memcpy(topRow, bottomRow, rowPitch);
+                std::memcpy(bottomRow, rowBuffer.data(), rowPitch);
+            }
+        }
+
         if (useDX10)
         {
             _tDDS_HEADER_DXT10 dx10Header{};
             dx10Header.dxgiFormat = DXGI_FORMAT_BC7_UNORM;
-            dx10Header.resourceDimension = 3; 
+            dx10Header.resourceDimension = 3;
             dx10Header.arraySize = 1;
 
             ddsFile.write(reinterpret_cast<char*>(&ddsHeader), sizeof(ddsHeader));
