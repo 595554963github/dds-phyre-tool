@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <Windows.h>
 #include <io.h>
 #include <fcntl.h>
@@ -51,9 +51,9 @@ bool ConvertPhyreToDDS(const std::wstring& inputFile) {
 }
 
 void printUsage() {
-    std::wcerr << L"用法: dds-phyre-tool.exe <输入文件路径>\n";
-    std::wcerr << L"示例: dds-phyre-tool.exe C:\\game\\texture.phyre\n";
-    std::wcerr << L"输出文件将自动保存为: C:\\game\\texture.dds\n";
+    std::wcerr << L"用法: dds-phyre-tool.exe <输入文件>\n";
+    std::wcerr << L"示例: dds-phyre-tool.exe texture.phyre\n或者把文件拖到exe上即可解包\n";
+    std::wcerr << L"输出文件将自动保存为同名的dds\n";
 }
 
 int wmain(int argc, wchar_t* argv[]) {
@@ -88,7 +88,7 @@ int wmain(int argc, wchar_t* argv[]) {
     }
 
     if (!IsPhyreFile(inputFile)) {
-        std::wcerr << L"错误: 不是有效的Phyre文件 - " << inputFile << L"\n";
+        std::wcerr << L"错误:不是有效的Phyre文件-" << inputFile << L"\n";
         return EXIT_FAILURE;
     }
 
